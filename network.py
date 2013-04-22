@@ -92,9 +92,6 @@ class network(object):
 			self.h_n[0][h] = self.sigmoid(self.h_n[0][h])
 #		pp.pprint(self.o_n)
 
-
-
-
 	def sigmoid(self,x):
 		return 1/(1+math.exp(x))
 
@@ -106,6 +103,31 @@ class network(object):
 	def properties(self):
 		print "Inputs:",self.inputs,"\nHidden layers:",self.hidden_layers,"\nHidden neurons:",self.hidden_neurons,"\nOutputs:",self.outputs
 
+	def showNet(self):
+		import pygame
+		pygame.init() 
+		distance = 80
+		window = pygame.display.set_mode((((self.hidden_layers+2)*distance)+distance+(distance/2),((self.hidden_neurons+1)*distance)+20))
+#		window = pygame.display.set_mode(((self.hidden_layers+2)*(2*distance)), ((self.hidden_neurons+1)*distance+20)) 
+
+		for h in xrange(0,self.inputs):
+			pygame.draw.rect(window, (255,255,255), (distance,(h+1)*distance,20,20),1)
+
+		for h in xrange(0,self.hidden_layers):
+			for j in xrange(0,self.hidden_neurons):
+				pygame.draw.circle(window,(255,255,255),(((h+2)*distance)+20,((j+1)*distance)+10),10)
+
+		for h in xrange(0,self.outputs):
+			pygame.draw.rect(window, (255,255,255), (((self.hidden_layers+2)*distance)+20,(h+1)*distance,20,20),1)
+
+		pygame.display.update() 
+
+		while(True):
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit(); sys.exit();
+
 net = network(2,2,3,2)
-#net.properties()
-net.activate()
+net.properties()
+#net.activate()
+net.showNet()
