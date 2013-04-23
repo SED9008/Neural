@@ -40,7 +40,7 @@ class network(object):
 #		print self.w_ih,"\n--------"
 #		print len(self.w_ih)
 #		print self.w_hh
-#		pp.pprint(self.w_ho)
+		pp.pprint(self.w_ih)
 #		print len(self.w_ho)
 
 #		print self.h_n
@@ -113,21 +113,36 @@ class network(object):
 
 		""""Drawing the iputs, hidden neurons and ouput neurons"""
 		for h in xrange(0,self.inputs):
-			pygame.draw.rect(window, (255,255,255), (distance,(h+1)*distance,20,20),1)
+			if self.i_n[h] < 0: 			color = (255,0,0)
+			elif self.i_n[h] == 0: 			color = (255,255,255)
+			else: 							color = (0,255,0)
+			pygame.draw.rect(window, color, (distance,(h+1)*distance,20,20),1)
 
 		for h in xrange(0,self.hidden_layers):
 			for j in xrange(0,self.hidden_neurons):
-				pygame.draw.circle(window,(255,255,255),(((h+2)*distance)+20,((j+1)*distance)+10),11)
-		#		pygame.draw.circle(window,(0,0,0),(((h+2)*distance)+20,((j+1)*distance)+10),10)
+				if self.h_n[h][j] < 0: 		color = (255,0,0)
+				elif self.h_n[h][j] == 0: 	color = (255,255,255)
+				else: 						color = (0,255,0)
+				pygame.draw.circle(window,color,(((h+2)*distance)+20,((j+1)*distance)+10),11)
+#				pygame.draw.circle(window,(0,0,0),(((h+2)*distance)+20,((j+1)*distance)+10),10)
 
 		for h in xrange(0,self.outputs):
-			pygame.draw.rect(window, (255,255,255), (((self.hidden_layers+2)*distance)+20,(h+1)*distance,20,20),1)
+			if self.o_n[h] < 0: 			color = (255,0,0)
+			elif self.o_n[h] == 0: 			color = (255,255,255)
+			else: 							color = (0,255,0)
+			pygame.draw.rect(window, color, (((self.hidden_layers+2)*distance)+20,(h+1)*distance,20,20),1)
 
 		for h in xrange(0,self.inputs):
-			for j in xrange(0,self.hidden_neurons):
-				pygame.draw.line(window, (255, 255, 255), (distance+20, ((h+1)*distance)+10), (((0+2)*distance)+20, ((j+1)*distance)+10))
-#				pygame.draw.lines(window, (255,255,255), True, ((distance,(h+1)*distance),(((j+1)*distance)+10)), 1)
-		
+			for j in xrange(0,self.hidden_neurons-1):
+				if self.w_ih[h][j] < 0: 	color = (255,0,0)
+				elif self.w_ih[h][j] == 0: 	color = (255,255,255)
+				else: 						color = (0,255,0)
+
+				if self.w_ih[h][j] < 0:		thickness = int(round(self.w_ih[h][j]*-5))
+				else:						thickness = int(round(self.w_ih[h][j]*5))
+				pygame.draw.line(window, color, (distance+20, ((h+1)*distance)+10), (((0+2)*distance)+10, ((j+1)*distance)+10),thickness)
+
+
 		pygame.display.update() 
 
 		running = True;
@@ -138,7 +153,7 @@ class network(object):
 					pygame.display.quit(); running = False; 
 
 
-net = network(2,1,2,1)
+net = network(2,2,2,1)
 net.properties()
 #net.activate()
 net.showNet()
