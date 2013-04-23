@@ -104,8 +104,8 @@ class network(object):
 	def properties(self):
 		print "Inputs:",self.inputs,"\nHidden layers:",self.hidden_layers,"\nHidden neurons:",self.hidden_neurons,"\nOutputs:",self.outputs
 
+	"""Drawing the network graphically"""
 	def showNet(self):
-
 		pygame.init() 
 		distance = 80
 		window = pygame.display.set_mode((((self.hidden_layers+2)*distance)+distance+(distance/2),((self.hidden_neurons+1)*distance)+20))
@@ -173,7 +173,6 @@ class network(object):
 #				pygame.draw.line(screen, (0, 0, 255), (0, 0), (200, 100))
 				pygame.draw.line(window, color,(((self.hidden_layers+1)*distance)+30,(((h+1)*distance)+10)),(((self.hidden_layers+2)*distance)+20,((j+1)*distance)+10),thickness)
 
-
 		pygame.display.update() 
 
 		running = True;
@@ -184,7 +183,4 @@ class network(object):
 					pygame.display.quit(); running = False; 
 
 
-net = network(2,5,3,1)
-net.properties()
-#net.activate()
-net.showNet()
+
