@@ -112,12 +112,14 @@ class network(object):
 #		window = pygame.display.set_mode(((self.hidden_layers+2)*(2*distance)), ((self.hidden_neurons+1)*distance+20)) 
 
 		""""Drawing the iputs, hidden neurons and ouput neurons"""
+		#Drawing the input rectangles
 		for h in xrange(0,self.inputs):
 			if self.i_n[h] < 0: 			color = (255,0,0)
 			elif self.i_n[h] == 0: 			color = (255,255,255)
 			else: 							color = (0,255,0)
 			pygame.draw.rect(window, color, (distance,(h+1)*distance,20,20),1)
 
+		#Drawing the hidden layer circles
 		for h in xrange(0,self.hidden_layers):
 			for j in xrange(0,self.hidden_neurons):
 				if self.h_n[h][j] < 0: 		color = (255,0,0)
@@ -126,12 +128,14 @@ class network(object):
 				pygame.draw.circle(window,color,(((h+2)*distance)+20,((j+1)*distance)+10),11)
 #				pygame.draw.circle(window,(0,0,0),(((h+2)*distance)+20,((j+1)*distance)+10),10)
 
+		#Drawing the output rectangles
 		for h in xrange(0,self.outputs):
 			if self.o_n[h] < 0: 			color = (255,0,0)
 			elif self.o_n[h] == 0: 			color = (255,255,255)
 			else: 							color = (0,255,0)
 			pygame.draw.rect(window, color, (((self.hidden_layers+2)*distance)+20,(h+1)*distance,20,20),1)
 
+		#Drawing the weights from input to hidden layer representing the weight with the thickness
 		for h in xrange(0,self.inputs):
 			for j in xrange(0,self.hidden_neurons-1):
 				if self.w_ih[h][j] < 0: 	color = (255,0,0)
@@ -141,6 +145,33 @@ class network(object):
 				if self.w_ih[h][j] < 0:		thickness = int(round(self.w_ih[h][j]*-5))
 				else:						thickness = int(round(self.w_ih[h][j]*5))
 				pygame.draw.line(window, color, (distance+20, ((h+1)*distance)+10), (((0+2)*distance)+10, ((j+1)*distance)+10),thickness)
+
+		#Drawing the weights from hidden to hidden
+		if(self.hidden_layers > 1):
+			for h in xrange(0,self.hidden_layers-1):
+				print h 
+				for j in xrange(0,self.hidden_neurons):
+					for k in xrange(0,self.hidden_neurons-1):
+						if self.w_hh[h][j][k] < 0: 		color = (255,0,0)
+						elif self.w_hh[h][j][k] == 0: 	color = (255,255,255)
+						else: 							color = (0,255,0)
+
+						if self.w_hh[h][j][k] < 0:		thickness = int(round(self.w_hh[h][j][k]*-5))
+						else:							thickness = int(round(self.w_hh[h][j][k]*5))
+		#				pygame.draw.line(screen, (0, 0, 255), (0, 0), (200, 100))
+						pygame.draw.line(window, color,(((2+h)*distance)+30,(((j+1)*distance)+10)),(((3+h)*distance)+10,((k+1)*distance)+10),thickness)
+
+		#Drawing the weights from the last hidden layer the outputs
+		for h in xrange(0,self.hidden_neurons):
+			for j in xrange(0,self.outputs):
+				if self.w_ho[h][j] < 0: 	color = (255,0,0)
+				elif self.w_ho[h][j] == 0: 	color = (255,255,255)
+				else: 						color = (0,255,0)
+
+				if self.w_ho[h][j] < 0:		thickness = int(round(self.w_ho[h][j]*-5))
+				else:						thickness = int(round(self.w_ho[h][j]*5))
+#				pygame.draw.line(screen, (0, 0, 255), (0, 0), (200, 100))
+				pygame.draw.line(window, color,(((self.hidden_layers+1)*distance)+30,(((h+1)*distance)+10)),(((self.hidden_layers+2)*distance)+20,((j+1)*distance)+10),thickness)
 
 
 		pygame.display.update() 
@@ -153,7 +184,7 @@ class network(object):
 					pygame.display.quit(); running = False; 
 
 
-net = network(2,2,2,1)
+net = network(2,5,3,1)
 net.properties()
 #net.activate()
 net.showNet()
