@@ -2,7 +2,7 @@
 
 from network import network
 
-net = network(2,1,2,1)
+net = network(2,2,2,1)
 net.properties()
 #net.activate()
 net.showNet()
