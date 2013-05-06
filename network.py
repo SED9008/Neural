@@ -2,6 +2,7 @@
 import random
 import math
 import pprint
+import pygame
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -86,12 +87,19 @@ class network(object):
 			for j in xrange(0,self.outputs):
 				self.delta[self.hidden_layers-1][h] += self.delta[self.hidden_layers][j] * self.weights[self.hidden_layers][h][j]
 			self.delta[self.hidden_layers-1][h] = self.outs[self.hidden_layers][h] * (1-self.outs[self.hidden_layers][h]) * self.delta[self.hidden_layers-1][h]
+		
+		if(self.hidden_layers > 1):
+			for h in xrange(self.hidden_layers-2,-1,-1):
+				for j in xrange(0,self.hidden_neurons-1):
+					self.delta[h][j] = 0
+					for k in xrange(0,self.hidden_neurons-1):
+						self.delta[h][j] += self.delta[h+1][k] * self.weights[h][j][k]
+					self.delta[h][j] = self.outs[h+1][h] * (1-self.outs[h+1][h]) * self.delta[h][j]
 		return sse
-		"""Missing multiple layer support here"""
 
 	def adjustWeights(self, alpha):
 		for h in xrange(len(self.delta)-1,-1,-1):
-			for j in xrange(0,self.hidden_neurons):
+			for j in xrange(0,self.layer_neurons[h]):
 				for k in xrange(0,self.layer_weights[h+1]-1):
 					self.weights[h][j][k] += alpha * self.outs[h][j] * self.delta[h][k]
 
@@ -108,14 +116,36 @@ class network(object):
 		return ((2*a)/(1+math.exp(-b*x)))-a
 
 	def showNet(self, hold):
-		"""
-		Drawing the network graphically
-		"""
 		pygame.init() 
-		distance = 80
-		window = pygame.display.set_mode((((self.hidden_layers+2)*distance)+distance+(distance/2),((self.hidden_neurons+1)*distance)+20))
-		#Drawing the iputs, hidden neurons and ouput neurons
-		#Drawing the input rectangles
+		dist = 100
+		rect 	 = 20
+		height_neurons = self.inputs+1
+		if(self.inputs > self.hidden_neurons):
+			height_neurons = self.inputs+1
+		else:
+			height_neurons = self.hidden_neurons
+		window = pygame.display.set_mode(((len(self.layer_neurons))*dist,(height_neurons)*dist))
+
+		for h in xrange(0,len(self.layer_neurons)-1):
+			for j in xrange(0,self.layer_weights[h]):
+				for k in xrange(0,self.layer_weights[h+1]-1):
+					thickness 	= self.getThickness(self.weights[h][j][k])
+					color 		= self.getColor(self.weights[h][j][k])
+					point1 = [(h*dist)+(dist/2)+(rect/2),(j*dist)+(dist/2)]
+					point2 = [((h+1)*dist)+(dist/2)-(rect/2),(k*dist)+(dist/2)]
+#					print point1,point2
+					pygame.draw.line(window, color, point1, point2, thickness)
+
+		for h in xrange(0,len(self.layer_neurons)):
+			for j in xrange(0,self.layer_neurons[h]):
+				color = self.getColor(self.outs[h][j])
+				pygame.draw.rect(window, color, (((h*dist)+(dist/2)-(rect/2)),((j*dist)+(dist/2)-(rect/2)),rect,rect),2)
+		
+		pygame.display.update()
+		
+		 
+
+		"""
 		for h in xrange(0,self.inputs):
 			if self.i_n[h] < 0: 			color = (255,0,0)
 			elif self.i_n[h] == 0: 			color = (255,255,255)
@@ -129,7 +159,7 @@ class network(object):
 				elif self.h_n[h][j] > 0.1: 	color = (0,255,0)
 				else: 						color = (255,255,255)
 				pygame.draw.circle(window,color,(((h+2)*distance)+20,((j+1)*distance)+10),11)
-#				pygame.draw.circle(window,(0,0,0),(((h+2)*distance)+20,((j+1)*distance)+10),10)
+		#				pygame.draw.circle(window,(0,0,0),(((h+2)*distance)+20,((j+1)*distance)+10),10)
 
 		#Drawing the output rectangles
 		for h in xrange(0,self.outputs):
@@ -149,7 +179,7 @@ class network(object):
 		#Drawing the weights from hidden to hidden
 		if(self.hidden_layers > 1):
 			for h in xrange(1,self.hidden_layers): #changed some shit here
-#				print h 
+		#				print h 
 				for j in xrange(0,self.hidden_neurons):
 					for k in xrange(0,self.hidden_neurons-1):
 						weight = int(round(self.weights[h][j][k]))
@@ -164,21 +194,22 @@ class network(object):
 				weight = int(round(self.weights[self.hidden_layers][h][j]))
 				color 		= self.getColor(weight)
 				thickness 	= self.getThickness(weight)
-#				pygame.draw.line(screen, (0, 0, 255), (0, 0), (200, 100))
+		#				pygame.draw.line(screen, (0, 0, 255), (0, 0), (200, 100))
 				pygame.draw.line(window, color,(((self.hidden_layers+1)*distance)+30,(((h+1)*distance)+10)),(((self.hidden_layers+2)*distance)+20,((j+1)*distance)+10),thickness)
 
 		pygame.display.update() 
+		"""
 		if hold == True:
 			running = True;
 			while(running):
 				for event in pygame.event.get():
-	#				print event.type
+		#				print event.type
 					if event.type == 5:
 						pygame.display.quit(); running = False; 
 
-	def getColor(self,weight):
-		if weight < 0: 		return (255,0,0)
-		elif weight == 0: 	return (255,255,255)
+	def getColor(self,x):
+		if(x < 0): 		return (255,0,0)
+		elif(x == 0): 	return (255,255,255)
 		else: 				return (0,255,0)
 
 	def getThickness(self,weight):
