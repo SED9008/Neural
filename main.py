@@ -1,7 +1,5 @@
 #!/usr/bin/python2
 
-import time
-import random
 from network import network
 import pprint
 
@@ -11,38 +9,9 @@ pp = pprint.PrettyPrinter(indent=4)
 truth_in 	= [[0,0],[0,1],[1,0],[1,1]]
 truth_out 	= [[0],[1],[1],[0]]
 
-learning_rate = 2
+net 		= network(2,1,3,1) 				#inputs, hidden_layers, hidden_neurons, outputs
+net.debug 	= True
+net.alpha	= 1								#Learning rate
 
-net = network(2,3,4,1) #inputs, hidden_layers, hidden_neurons, outputs
-
-sse = 10;
-#h = 1
-cnt = 0
-
-
-while(sse > 0.01):
-	sse = 0
-	for h in xrange(0,len(truth_in)):
-		net.calcOutputs(truth_in[h])
-#		pp.pprint(net.delta)
-		sse += net.calcErrors(truth_out[h])
-#		pp.pprint(net.delta)
-#		raw_input()
-		net.adjustWeights(learning_rate)
-		print truth_in[h],truth_out[h],net.outs[net.hidden_layers+1],sse
-		net.showNet(False)
-		cnt += 1
-#		pp.pprint(net.weights)
-#		raw_input()
-		
-print "Epochs:",cnt/4, "Learning_rate of:", learning_rate,"\n"
-pp.pprint(net.weights)
-
-print ""
-for h in xrange(len(truth_in)):
-	net.calcOutputs(truth_in[h])
-	print truth_in[h],truth_out[h],net.outs[net.hidden_layers+1]
-	net.showNet(False)
-	time.sleep(1)
-
-net.showNet(True)
+#net.trainEpochs(truth_in,truth_out,2000) 	#input_set, output_set, learning_rate, epochs
+net.trainSSE(truth_in,truth_out,0.01)		#input_set, output_set, learning_rate, target_sse
