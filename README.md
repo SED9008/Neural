@@ -3,7 +3,7 @@ Neural Network in Python
 (Under construction)
 
 This object will allow you to create and train artificial neural networks. This project spawned to help myself learn the language python.
-A nice feature is that the network can be graphically represented using the pygame module. This gives a lot of insight in what is actually happening to the network.
+A nice feature is that the network can be graphically represented using the pygame module. This gives a lot of insight in what is actually happening to the network. You do have to install the pygame module to be able to use this
 
 My goal is to get familiarised with the different techniques that can be used to create and train a neural network. 
 Over time functions and tricks will be added to see how they affect speed and stability of learning.
