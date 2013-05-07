@@ -8,14 +8,18 @@ A nice feature is that the network can be graphically represented using the pyga
 My goal is to get familiarised with the different techniques that can be used to create and train a neural network. 
 Over time functions and tricks will be added to see how they affect speed and stability of learning.
 
-
+main.py
+=======
+This file shows how to create and train a network.
+It is actually the file i use to study certain techniques and their effect and also to debug the network code. It should always show how to create and train a network though.
+I will add an example in the readme to show how to use the object.
 
 network.py
 ==========
 
 network(self, inputs, hidden_layers, hidden_neurons, outputs)
 -------------------------------------------------------------
-This function creates the network with the desired parameters.
+This function creates a network object with the desired parameters.
 It also initialises the basic variable structures and initialises the weights.
 
 initWeights(self)
