@@ -13,7 +13,7 @@ truth_out 	= [[0],[1],[1],[0]]
 
 learning_rate = 1
 
-net = network(2,2,2,1) #inputs, hidden_layers, hidden_neurons, outputs
+net = network(2,1,3,1) #inputs, hidden_layers, hidden_neurons, outputs
 net.initWeights()
 pp.pprint(net.weights)
 sse = 10;
@@ -45,4 +45,7 @@ print ""
 for h in xrange(len(truth_in)):
 	net.calcOutputs(truth_in[h])
 	print truth_in[h],truth_out[h],net.outs[net.hidden_layers+1]
+	net.showNet(False)
+	time.sleep(1)
+
 net.showNet(True)
