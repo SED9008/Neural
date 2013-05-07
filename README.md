@@ -1,5 +1,5 @@
-Neural Network in Python
-========================
+Neural Network in Python2
+=========================
 (Under construction)
 
 This object will allow you to create and train artificial neural networks. This project spawned to help myself learn the language python.
