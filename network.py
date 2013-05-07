@@ -92,11 +92,11 @@ class network(object):
 		
 		if(self.hidden_layers > 1):
 			for h in xrange(self.hidden_layers-2,-1,-1):
-				for j in xrange(0,self.hidden_neurons-1):
+				for j in xrange(0,self.layer_weights[h+1]-1):
 					self.delta[h][j] = 0
-					for k in xrange(0,self.hidden_neurons-1):
-						self.delta[h][j] += self.delta[h+1][k] * self.weights[h][j][k]
-					self.delta[h][j] = self.outs[h+1][h] * (1-self.outs[h+1][h]) * self.delta[h][j]
+					for k in xrange(0,self.layer_weights[h+1]-1):
+						self.delta[h][j] += self.delta[h+1][k] * self.weights[h+1][j][k]
+					self.delta[h][j] = self.outs[h+1][j] * (1-self.outs[h+1][j]) * self.delta[h][j]
 		return sse
 
 	def adjustWeights(self, alpha):

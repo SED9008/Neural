@@ -11,15 +11,13 @@ pp = pprint.PrettyPrinter(indent=4)
 truth_in 	= [[0,0],[0,1],[1,0],[1,1]]
 truth_out 	= [[0],[1],[1],[0]]
 
-learning_rate = 1
+learning_rate = 2
 
-net = network(2,1,2,1) #inputs, hidden_layers, hidden_neurons, outputs
-pp.pprint(net.weights)
+net = network(2,3,4,1) #inputs, hidden_layers, hidden_neurons, outputs
+
 sse = 10;
 #h = 1
 cnt = 0
-
-raw_input()
 
 
 while(sse > 0.01):
