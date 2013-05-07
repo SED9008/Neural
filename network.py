@@ -53,6 +53,8 @@ class network(object):
 			for j in xrange(0,self.layer_weights[h+1]-1):
 				self.delta[h].append([])
 
+		self.initWeights()
+
 	def initWeights(self):
 		random.seed()
 		self.weights = []
@@ -102,6 +104,32 @@ class network(object):
 			for j in xrange(0,self.layer_neurons[h]):
 				for k in xrange(0,self.layer_weights[h+1]-1):
 					self.weights[h][j][k] += alpha * self.outs[h][j] * self.delta[h][k]
+
+	def trainEpochs(self, input_set, output_set, learning_rate, epochs):
+		if(len(input_set) != len(output_set)):
+			print "Input and output set length mismatch!"
+			return 0
+		cnt = 0
+		while(cnt < epochs):
+			for h in xrange(0,len(input_set)):
+				net.calcOutputs(input_set[h])
+				sse += net.calcErrors(output_set[h])
+				net.adjustWeights(learning_rate)
+				net.showNet(False)
+				print truth_in[h],truth_out[h],net.outs[net.hidden_layers+1],sse
+			cnt +=1
+
+		pp.pprint(net.weights)
+		print "\nEpochs:",cnt, "Learning_rate of:", learning_rate,"\n\n"
+
+		for h in xrange(len(truth_in)):
+			net.calcOutputs(truth_in[h])
+			print truth_in[h],truth_out[h],net.outs[net.hidden_layers+1]
+			net.showNet(False)
+			time.sleep(1)
+
+		net.showNet(True)
+
 
 	#Using this to maybe add some more activation functions 
 	#and study the way they work

@@ -13,14 +13,13 @@ truth_out 	= [[0],[1],[1],[0]]
 
 learning_rate = 1
 
-net = network(2,1,3,1) #inputs, hidden_layers, hidden_neurons, outputs
-net.initWeights()
+net = network(2,1,2,1) #inputs, hidden_layers, hidden_neurons, outputs
 pp.pprint(net.weights)
 sse = 10;
 #h = 1
 cnt = 0
 
-
+raw_input()
 
 
 while(sse > 0.01):
