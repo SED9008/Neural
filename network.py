@@ -187,7 +187,7 @@ class network(object):
 			height_neurons = self.inputs+1
 		else:
 			height_neurons = self.hidden_neurons
-		window = pygame.display.set_mode(((len(self.layer_neurons))*dist,(height_neurons)*dist))
+		window = pygame.display.set_mode(((len(self.layer_neurons))*dist,(height_neurons)*dist), pygame.RESIZABLE)
 		pygame.display.set_caption("Neural Network")
 		window.fill((94,130,167))
 		myfont = pygame.font.SysFont("DejaVuSans Mono", 15)
@@ -222,7 +222,7 @@ class network(object):
 		for h in xrange(0,len(self.layer_neurons)):
 			for j in xrange(0,self.layer_neurons[h]):
 				color = self.getColor(self.outs[h][j])
-				label = myfont.render(str(round(self.outs[h][j])), 8, (0,0,0))
+				label = myfont.render(str(round(self.outs[h][j],1)), 8, (0,0,0))
 				window.blit(label, ((h*dist)+(dist/2)-(rect/2)-2,(j*dist)+(dist/2)+(rect/2)+(rect/8)))
 				pygame.draw.rect(window, (0,0,0), (((h*dist)+(dist/2)-(rect/2)),((j*dist)+(dist/2)-(rect/2)),rect,rect))
 				pygame.draw.rect(window, color, (((h*dist)+(dist/2)-(rect/2)),((j*dist)+(dist/2)-(rect/2)),rect,rect),3)

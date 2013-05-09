@@ -22,29 +22,59 @@ network(self, inputs, hidden_layers, hidden_neurons, outputs)
 This function creates a network object with the desired parameters.
 It also initialises the basic variable structures and initialises the weights.
 
+ex: net = network(2,2,3,1)
+
 initWeights(self)
 -----------------
-Initialises the weights using the random module from python.
+Initialises the weights using the random module from python. This function is executed when creating the network.
+
+ex: net.initWeights
 
 calcOuts(self,inputs)
 ---------------------
 Calculates the outputs for every single neuron according to a certain input set that has to be passed along.
 
+ex: net.calcOuts(inputs)
+
 calcErrors(self,desired)
 ------------------------
 Calculates the errors and error gradients so we can backpropegate the error through the network. This is done by using the desired output that has to be passed along.
+
+ex: net.calcErrors(desired)
 
 adjustWeights(self)
 -------------------
 This function adjusts the weights according to the previously calculated error gradients
 
+ex: net.adjustWeights()
+
 trainEpochs(self, input_set, output_set, epochs)
 ------------------------------------------------
 Trains the weights for a certain amount of epochs(cycles) using a specified in- and output set.
 
+net.trainEpochs(input_set, output_set, 2000)
+
 trainSSE(self, input_set, output_set, target_sse)
 -------------------------------------------------
 Trains the weights until the sum of the squared errors is lower than the specified target SSE. Again using a specified in- and output set.
+
+net.trainSSE(input_set, output_set, 0.01)
+
+showNet(self, hold, epoch)
+--------------------------
+This function draws the neural network graphically to give a neat insight in what is happening to the network.
+I have not done any graphical programming so i'm just going to keep this as simple as possible. 
+Closing the windows is possible by pressing alt+f4.
+Hold is a boolean and when true, the graphical representation will be shown untill it is manually closed.
+The variable epoch will show the number passed inside the graphical representation.
+
+Warning: If your network is rather large this function will spawn an equally large window, it has no max size yet so be carefull!
+
+ex: net.showNet(True, epoch)
+
+Help Functions
+==============
+These functions are more under the hood functions. Check them out in the source code if you want to know more.
 
 activate(self,x)
 ----------------
@@ -58,13 +88,6 @@ Applies the sigmoidal function to x as activation function
 hypTangent(self,x)
 ------------------
 Applies the hyperbolic tangent function to x as activation function
-
-showNet(self, hold, epoch)
---------------------------
-This function draws the neural network graphically to give a neat insight in what is happening to the network.
-I have not done any graphical programming so i'm just going to keep this as simple as possible. 
-
-Warning: If your network is rather large this function will spawn an equally large window, it has no max size yet so be carefull!
 
 getColor(self,x)
 ----------------
