@@ -62,6 +62,7 @@ class network(object):
 	def useGraph(self):
 		global pygame
 		import pygame
+		self.graph = True
 
 	def initWeights(self):
 		random.seed()
@@ -140,8 +141,9 @@ class network(object):
 			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
 			self.showNet(False,cnt)
 			time.sleep(1)
-
-		self.showNet(True,cnt)
+		if(self.graph):
+			self.showNet(True,cnt)
+		return cnt
 
 	def trainSSE(self, input_set, output_set, target_sse):
 		if(len(input_set) != len(output_set)):
@@ -170,8 +172,9 @@ class network(object):
 			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
 			self.showNet(False,cnt)
 			time.sleep(1)
-
-		self.showNet(True,cnt)
+		if(self.graph):
+			self.showNet(True,cnt)
+		return cnt
 
 
 
