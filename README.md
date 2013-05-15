@@ -40,6 +40,8 @@ useGraph(self)
 --------------
 Using this function will import pygame. If you don't want to use the graphical representation then do not call this function and you won't need to install pygame.
 
+ex: net.useGraph()
+
 initWeights(self)
 -----------------
 Initialises the weights using the random module from python. This function is executed when creating the network.
