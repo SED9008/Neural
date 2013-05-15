@@ -15,8 +15,8 @@ net.alpha	= 2								#Learning rate
 
 net.useGraph()
 
-net.graph 	= False
+#net.graph 	= False
 
 #net.trainEpochs(truth_in,truth_out,2000) 	#input_set, output_set, learning_rate, epochs
-cnt = net.trainSSE(truth_in,truth_out,0.01)	#input_set, output_set, learning_rate, target_sse
-net.showNet(True,cnt)
+cnt = net.train(truth_in,truth_out,1,0.01)	#input_set, output_set, learning_rate, target_sse
+#net.showNet(True,cnt)

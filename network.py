@@ -114,13 +114,21 @@ class network(object):
 				for k in xrange(0,self.layer_weights[h+1]-1):
 					self.weights[h][j][k] += self.alpha * self.outs[h][j] * self.delta[h][k]
 
-	def trainEpochs(self, input_set, output_set, epochs):
+	def train(self, input_set, output_set, train_type, amount):
 		if(len(input_set) != len(output_set)):
 			print "Input and output set length mismatch!"
 			return 0
 		cnt = 0
+		self.sse = 10
 
-		while(cnt < epochs):
+		if(train_type):
+			a = amount
+			b = self.sse
+		else:
+			a = cnt
+			b = amount
+			
+		while(a < b):
 			self.sse = 0
 			for h in xrange(0,len(input_set)):
 				self.calcOuts(input_set[h])
@@ -132,6 +140,11 @@ class network(object):
 					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 			cnt +=1
 			print self.sse
+			if(train_type):
+				b = self.sse
+			else:
+				a = cnt
+
 		print ""
 		pp.pprint(self.weights)
 		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
@@ -139,44 +152,12 @@ class network(object):
 		for h in xrange(len(input_set)):
 			self.calcOuts(input_set[h])
 			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
-			self.showNet(False,cnt)
+			if(self.graph):
+				self.showNet(False,cnt)
 			time.sleep(1)
 		if(self.graph):
 			self.showNet(True,cnt)
 		return cnt
-
-	def trainSSE(self, input_set, output_set, target_sse):
-		if(len(input_set) != len(output_set)):
-			print "Input and output set length mismatch!"
-			return 0
-		cnt 		= 0
-		self.sse 	= 10 #begin value to enter the whileloop
-		while(self.sse > target_sse):
-			self.sse = 0
-			for h in xrange(0,len(input_set)):
-				self.calcOuts(input_set[h])
-				self.sse += self.calcErrors(output_set[h])
-				self.adjustWeights()
-				if(self.graph):
-					self.showNet(False,cnt)
-				if self.debug:
-					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
-			cnt +=1
-			print self.sse
-		print ""
-		pp.pprint(self.weights)
-		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
-
-		for h in xrange(len(input_set)):
-			self.calcOuts(input_set[h])
-			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
-			self.showNet(False,cnt)
-			time.sleep(1)
-		if(self.graph):
-			self.showNet(True,cnt)
-		return cnt
-
-
 
 	#Using this to maybe add some more activation functions 
 	#and study the way they work
