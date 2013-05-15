@@ -27,9 +27,10 @@ class network(object):
 		self.layer_weights[1] 					= self.hidden_neurons
 		self.layer_weights[self.hidden_layers+1]= self.outputs + 1
 
-		self.debug	= False
-		self.alpha	= 1	
-		self.graph	= False
+		self.debug		= False
+		self.alpha		= 1	
+		self.graph		= False
+		self.graphFreq	= 1
 		
 		if(self.hidden_layers > 1):
 			for h in xrange(2,self.hidden_layers+1):
@@ -114,14 +115,14 @@ class network(object):
 				for k in xrange(0,self.layer_weights[h+1]-1):
 					self.weights[h][j][k] += self.alpha * self.outs[h][j] * self.delta[h][k]
 
-	def train(self, input_set, output_set, train_type, amount):
+	def train(self, input_set, output_set, mode, amount):
 		if(len(input_set) != len(output_set)):
 			print "Input and output set length mismatch!"
 			return 0
 		cnt = 0
 		self.sse = 10
 
-		if(train_type):
+		if(mode):
 			a = amount
 			b = self.sse
 		else:
@@ -134,13 +135,13 @@ class network(object):
 				self.calcOuts(input_set[h])
 				self.sse += self.calcErrors(output_set[h])
 				self.adjustWeights()
-				if(self.graph):
-					self.showNet(False,cnt)
 				if self.debug:
 					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
-			cnt +=1
+				if(self.graph and not (cnt % self.graphFreq)):
+						self.showNet(False,cnt)
+			cnt += 1
 			print self.sse
-			if(train_type):
+			if(mode):
 				b = self.sse
 			else:
 				a = cnt
