@@ -23,8 +23,11 @@ Variables
 Here are some handy variables that can be used to tweak your network.
 
 ex: net.debug 		= True 	#Will print the inputs, outputs, epoch count and the sum of squared errors to the terminal.
+
 ex: net.alpa 		= 1		#Sets the learning rate of the network. The default is 1.
+
 ex: net.graph 		= False #Specifies wether or not you want to show the graphical rep. while training.
+
 ex: net.graphFreq 	= 10 	#Only update the graphical rep. after 10 epochs.
 
 network(self, inputs, hidden_layers, hidden_neurons, outputs)
