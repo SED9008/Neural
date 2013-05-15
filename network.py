@@ -27,10 +27,12 @@ class network(object):
 		self.layer_weights[1] 					= self.hidden_neurons
 		self.layer_weights[self.hidden_layers+1]= self.outputs + 1
 
-		self.debug		= False
-		self.alpha		= 1	
-		self.graph		= False
-		self.graphFreq	= 1
+		self.debug			= False
+		self.alpha			= 0.1
+		self.graph			= False
+		self.graphFreq		= 1
+		self.adaptive_alpha	= False
+		self.alpha_roof		= 3
 		
 		if(self.hidden_layers > 1):
 			for h in xrange(2,self.hidden_layers+1):
@@ -120,8 +122,8 @@ class network(object):
 			print "Input and output set length mismatch!"
 			return 0
 		cnt = 0
-		self.sse = 10
-
+		self.sse = 1
+		last_sse = 1
 		if(mode):
 			a = amount
 			b = self.sse
@@ -131,16 +133,32 @@ class network(object):
 			
 		while(a < b):
 			self.sse = 0
+
 			for h in xrange(0,len(input_set)):
 				self.calcOuts(input_set[h])
 				self.sse += self.calcErrors(output_set[h])
 				self.adjustWeights()
+
 				if self.debug:
 					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 				if(self.graph and not (cnt % self.graphFreq)):
 						self.showNet(False,cnt)
+
 			cnt += 1
-			print self.sse
+			if(self.adaptive_alpha):
+				if(self.sse < (last_sse*0.96) or self.sse > (last_sse*1.04)):
+					self.alpha *= 0.7
+				else:
+					self.alpha *= 1.04
+
+				if(self.alpha > self.alpha_roof):
+					self.alpha = self.alpha_roof
+				elif(self.alpha < 0.01):
+					self.alpha = 0.01
+
+			
+			print last_sse, self.sse, self.alpha
+			last_sse = self.sse
 			if(mode):
 				b = self.sse
 			else:
@@ -195,6 +213,10 @@ class network(object):
 		window.blit(label, (((self.hidden_layers+2)*dist)/2-28, text_height))
 		label = myfont.render("Outputs", 8, (0,0,0))
 		window.blit(label, (((self.hidden_layers+2)*dist)-(dist/2)-(1.5*rect), text_height))
+
+		alpha = "Alpha: " + str(round(self.alpha,2))
+		label = myfont.render(alpha, 8, (0,0,0))
+		window.blit(label, (rect+2, dist*(height_neurons-1)+((dist/4)*2)))
 		epoch = "Epoch: " + str(epoch)
 		label = myfont.render(epoch, 8, (0,0,0))
 		window.blit(label, (rect+2, dist*(height_neurons-1)+((dist/4)*3)))
