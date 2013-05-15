@@ -4,6 +4,7 @@ Neural Network in Python2
 
 This object will allow you to create and train artificial neural networks. This project spawned to help myself learn the language python.
 A nice feature is that the network can be graphically represented using the pygame module. This gives a lot of insight in what is actually happening to the network. You do have to install the pygame module to be able to use this. For the linux users it's probably possible to get it from the standard repositories. Otherwise you can download it from http://www.pygame.org/download.shtml. Windows users can get the binary from the same link.
+Having pygame installed is not a prerequisite for running the code, only when you want the graphical representation.
 
 My goal is to get familiarised with the different techniques that can be used to create and train a neural network. 
 Over time functions and tricks will be added to see how they affect speed and stability of learning.
@@ -17,12 +18,25 @@ I will add an example in the readme to show how to use the object.
 network.py
 ==========
 
+Variables
+---------
+Here are some handy variables that can be used to tweak your network.
+
+ex: net.debug 		= True 	#Will print the inputs, outputs, epoch count and the sum of squared errors to the terminal.
+ex: net.alpa 		= 1		#Sets the learning rate of the network. The default is 1.
+ex: net.graph 		= False #Specifies wether or not you want to show the graphical rep. while training.
+ex: net.graphFreq 	= 10 	#Only update the graphical rep. after 10 epochs.
+
 network(self, inputs, hidden_layers, hidden_neurons, outputs)
 -------------------------------------------------------------
 This function creates a network object with the desired parameters.
 It also initialises the basic variable structures and initialises the weights.
 
 ex: net = network(2,2,3,1)
+
+useGraph(self)
+--------------
+Using this function will import pygame. If you don't want to use the graphical representation then do not call this function and you won't need to install pygame.
 
 initWeights(self)
 -----------------
@@ -48,17 +62,12 @@ This function adjusts the weights according to the previously calculated error g
 
 ex: net.adjustWeights()
 
-trainEpochs(self, input_set, output_set, epochs)
+train(self, input_set, output_set, mode, amount)
 ------------------------------------------------
-Trains the weights for a certain amount of epochs(cycles) using a specified in- and output set.
+Using the mode variable you can either train for a certain amount of epochs or untill a certain value of the sum of squared errors.
 
-net.trainEpochs(input_set, output_set, 2000)
-
-trainSSE(self, input_set, output_set, target_sse)
--------------------------------------------------
-Trains the weights until the sum of the squared errors is lower than the specified target SSE. Again using a specified in- and output set.
-
-net.trainSSE(input_set, output_set, 0.01)
+ex: net.train(input_set, output_set, 0, 2000) #Trains for 2000 epochs
+ex: net.train(input_set, output_set, 1, 0.01) #Trains until the sum of squared errors is smaller than 0.01
 
 showNet(self, hold, epoch)
 --------------------------
