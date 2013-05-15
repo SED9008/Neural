@@ -6,10 +6,11 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 
-truth_in 	= [[0,0],[0,1],[1,0],[1,1]]
-truth_out 	= [[0],[1],[1],[0]]
+truth_in 	= [[0],[1],[2],[3]]
+truth_out 	= [[0,0,0],[0,0,1],[0,1,0],[0,1,1]]
 
-net 		= network(2,2,4,1) 			#inputs, hidden_layers, hidden_neurons, outputs
+net 		= network(1,2,4,3) 			#inputs, hidden_layers, hidden_neurons, outputs
+net.useGraph()
 net.debug 	= True
 net.alpha	= 2								#Learning rate
 

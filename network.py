@@ -2,7 +2,6 @@
 import random
 import math
 import pprint
-import pygame
 import time
 
 pp = pprint.PrettyPrinter(indent=4)
@@ -30,6 +29,7 @@ class network(object):
 
 		self.debug	= False
 		self.alpha	= 1	
+		self.graph	= False
 		
 		if(self.hidden_layers > 1):
 			for h in xrange(2,self.hidden_layers+1):
@@ -58,6 +58,10 @@ class network(object):
 				self.delta[h].append([])
 
 		self.initWeights()
+
+	def useGraph(self):
+		global pygame
+		import pygame
 
 	def initWeights(self):
 		random.seed()
@@ -121,10 +125,12 @@ class network(object):
 				self.calcOuts(input_set[h])
 				self.sse += self.calcErrors(output_set[h])
 				self.adjustWeights()
-				self.showNet(False,cnt)
+				if(self.graph):
+					self.showNet(False,cnt)
 				if self.debug:
-					print input_set[h],output_set[h],self.outs[self.hidden_layers+1],self.sse, cnt
+					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 			cnt +=1
+			print self.sse
 		print ""
 		pp.pprint(self.weights)
 		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
@@ -149,10 +155,12 @@ class network(object):
 				self.calcOuts(input_set[h])
 				self.sse += self.calcErrors(output_set[h])
 				self.adjustWeights()
-				self.showNet(False,cnt)
+				if(self.graph):
+					self.showNet(False,cnt)
 				if self.debug:
-					print input_set[h],output_set[h],self.outs[self.hidden_layers+1],self.sse, cnt
+					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 			cnt +=1
+			print self.sse
 		print ""
 		pp.pprint(self.weights)
 		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
@@ -166,8 +174,10 @@ class network(object):
 		self.showNet(True,cnt)
 
 
+
 	#Using this to maybe add some more activation functions 
 	#and study the way they work
+
 	def activate(self,x):
 		return self.sigmoid(x)
 	def sigmoid(self,x):
