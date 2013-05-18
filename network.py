@@ -19,7 +19,6 @@ class network(object):
 		for h in xrange(0,self.hidden_layers + 2):
 			self.layer_neurons.append([])
 			self.layer_weights.append([])
-
 		self.layer_neurons[0] 					= self.inputs
 		self.layer_neurons[1] 					= self.hidden_neurons
 		self.layer_neurons[self.hidden_layers+1]= self.outputs
@@ -140,7 +139,9 @@ class network(object):
 				if(self.graph and not (cnt % self.graphFreq)):
 						self.showNet(False,cnt)
 			cnt += 1
-			print self.sse
+			
+			if self.debug:
+				print self.sse
 			if(mode):
 				b = self.sse
 			else:
@@ -172,6 +173,15 @@ class network(object):
 		a = 1.716
 		b = 0.667
 		return ((2*a)/(1+math.exp(-b*x)))-a
+
+	def scale(self, max_input, input_set):
+		scaled_input = input_set
+		for h in xrange(0,len(input_set)):
+#			scaled_input.append([])
+			for j in xrange(0,self.inputs-1):
+#				scaled_input[h].append([])
+				scaled_input[h][j] = float(input_set[h][j])/max_input
+		return scaled_input 
 
 	def showNet(self, hold, epoch):
 		pygame.init() 
