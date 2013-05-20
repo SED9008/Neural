@@ -59,14 +59,13 @@ class network(object):
 			for j in xrange(0,self.layer_weights[h+1]-1):
 				self.delta[h].append([])
 
-		self.initWeights()
-
 	def useGraph(self):
 		global pygame
 		import pygame
 		self.graph = True
 
 	def initWeights(self):
+		print "Initialising weights"
 		random.seed()
 		self.weights = []
 		#Create the layers in the weights structure
@@ -76,6 +75,21 @@ class network(object):
 				self.weights[h].append([])
 				for k in xrange(0,self.layer_weights[h+1]-1):
 					self.weights[h][j].append(round(random.uniform(-1,1),2))
+		print "Finished"
+
+	def loadWeights(self, filename):
+		file = open(filename, "r")
+		self.weights = file.read()
+		self.weights = self.weights.split("#\n")
+		for h in xrange(0,len(self.weights)):
+			self.weights[h] = self.weights[h].split("|\n")
+			for j in xrange(0,len(self.weights[h])):
+				self.weights[h][j] = self.weights[h][j].split(",")
+		for h in xrange(0,len(self.weights)):
+			for j in xrange(0,len(self.weights[h])):
+				for k in xrange(0,len(self.weights[h][j])):
+					self.weights[h][j][k] = float(self.weights[h][j][k])
+
 
 	def calcOuts(self, inputs):
 		for h in xrange(self.inputs-1):
@@ -138,14 +152,14 @@ class network(object):
 				self.sse += self.calcErrors(output_set[h])
 				self.adjustWeights()
 
-				if self.debug:
+				if(self.debug):
 					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 				if(self.graph and not (cnt % self.graphFreq)):
 						self.showNet(False,cnt)
 
 			cnt += 1
 			
-			if self.debug:
+			if(self.debug):
 				print self.sse
 
 			if(self.adaptive_alpha):
@@ -182,27 +196,41 @@ class network(object):
 			self.showNet(True,cnt)
 		return cnt
 
+	def saveWeights(self, filename):
+		file = open(filename,'w')
+
+		for h in xrange(0, len(self.weights)):
+			for j in xrange(0, len(self.weights[h])):
+				for k in xrange(0,len(self.weights[h][j])):
+					file.write(str(self.weights[h][j][k]))
+					if(k < len(self.weights[h][j])-1):
+						file.write(",")
+				if(j < len(self.weights[h])-1):
+					file.write("|\n")
+			if(h < len(self.weights)-1):
+				file.write("#\n")
+
+
 	#Using this to maybe add some more activation functions 
 	#and study the way they work
+	def scale(self,max_input, input_set):
+		scaled = []
+		for h in xrange(0,len(input_set)):
+			scaled.append([])
+			for j in xrange(0,len(input_set[h])):
+				scaled[h].append(float(input_set[h][j])/max_input)
+		return scaled
 
 	def activate(self,x):
 		return self.sigmoid(x)
 	def sigmoid(self,x):
+#		print x
 		return (1/(1+math.exp(-x)))
 	def hypTangent(self,x):
 		#a & b Chosen by Guyon, 1991
 		a = 1.716
 		b = 0.667
 		return ((2*a)/(1+math.exp(-b*x)))-a
-
-	def scale(self, max_input, input_set):
-		scaled_input = input_set
-		for h in xrange(0,len(input_set)):
-#			scaled_input.append([])
-			for j in xrange(0,self.inputs-1):
-#				scaled_input[h].append([])
-				scaled_input[h][j] = float(input_set[h][j])/max_input
-		return scaled_input 
 
 	def showNet(self, hold, epoch):
 		pygame.init() 
@@ -258,6 +286,7 @@ class network(object):
 				pygame.draw.rect(window, color, (((h*dist)+(dist/2)-(rect/2)),((j*dist)+(dist/2)-(rect/2)),rect,rect),3)
 
 		pygame.display.update()
+		#pygame.image.save(window,"filename.png")
 
 		if hold == True:
 			running = True;
