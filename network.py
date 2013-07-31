@@ -3,6 +3,8 @@ import random
 import math
 import pprint
 import time
+import sys
+import select
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -134,9 +136,10 @@ class network(object):
 		if(len(input_set) != len(output_set)):
 			print "Input and output set length mismatch!"
 			return 0
-		cnt = 0
-		self.sse = 1
-		last_sse = 1
+		loop 		= 1
+		cnt 		= 0
+		self.sse 	= 1
+		last_sse 	= 1
 		if(mode):
 			a = amount
 			b = self.sse
@@ -144,43 +147,50 @@ class network(object):
 			a = cnt
 			b = amount
 			
-		while(a < b):
-			self.sse = 0
-
-			for h in xrange(0,len(input_set)):
-				self.calcOuts(input_set[h])
-				self.sse += self.calcErrors(output_set[h])
-				self.adjustWeights()
-
-				if(self.debug):
-					print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
-				if(self.graph and not (cnt % self.graphFreq)):
-						self.showNet(False,cnt)
-
-			cnt += 1
-			
-			if(self.debug):
-				print self.sse
-
-			if(self.adaptive_alpha):
-				if(self.sse < (last_sse*0.96) or self.sse > (last_sse*1.04)):
-					self.alpha *= 0.7
-				else:
-					self.alpha *= 1.04
-
-				if(self.alpha > self.alpha_roof):
-					self.alpha = self.alpha_roof
-				elif(self.alpha < 0.01):
-					self.alpha = 0.01
-
-			
-			print last_sse, self.sse, self.alpha
-			last_sse = self.sse
-
-			if(mode):
-				b = self.sse
+		while(a < b and loop):
+			while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+				line = sys.stdin.readline()
+				if line:
+					loop = 0
+				else: # an empty line means stdin has been closed
+					loop = 0
 			else:
-				a = cnt
+				self.sse = 0
+
+				for h in xrange(0,len(input_set)):
+					self.calcOuts(input_set[h])
+					self.sse += self.calcErrors(output_set[h])
+					self.adjustWeights()
+
+					if(self.debug):
+						print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
+					if(self.graph and not (cnt % self.graphFreq)):
+							self.showNet(False,cnt)
+
+				cnt += 1
+				
+				if(self.debug):
+					print self.sse
+
+				if(self.adaptive_alpha):
+					if(self.sse < (last_sse*0.96) or self.sse > (last_sse*1.04)):
+						self.alpha *= 0.7
+					else:
+						self.alpha *= 1.04
+
+					if(self.alpha > self.alpha_roof):
+						self.alpha = self.alpha_roof
+					elif(self.alpha < 0.01):
+						self.alpha = 0.01
+
+				
+				print last_sse, self.sse, self.alpha
+				last_sse = self.sse
+
+				if(mode):
+					b = self.sse
+				else:
+					a = cnt
 
 		print ""
 		pp.pprint(self.weights)
