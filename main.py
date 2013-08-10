@@ -34,6 +34,6 @@ cnt = net.train(truth_in,truth_out,1,0.01)		#input_set, output_set, learning_rat
 #net.saveWeights("real_dice.txt")
 #print "Saved weights"
 
-net.showNet(True,0)
+#net.showNet(True,0)
 #net.calcOuts(truth_in[0])
 #print net.outs[2]
