@@ -150,10 +150,7 @@ class network(object):
 		while(a < b and loop):
 			while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
 				line = sys.stdin.readline()
-				if line:
-					loop = 0
-				else: # an empty line means stdin has been closed
-					loop = 0
+				loop = 0
 			else:
 				self.sse = 0
 
