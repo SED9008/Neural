@@ -6,9 +6,6 @@ This object will allow you to create and train artificial neural networks. This 
 A nice feature is that the network can be graphically represented using the pygame module. This gives a lot of insight in what is actually happening to the network. You do have to install the pygame module to be able to use this. For the linux users it's probably possible to get it from the standard repositories. Otherwise you can download it from http://www.pygame.org/download.shtml. Windows users can get the binary from the same link.
 Having pygame installed is not a prerequisite for running the code, only when you want the graphical representation.
 
-My goal is to get familiarised with the different techniques that can be used to create and train a neural network. 
-Over time functions and tricks will be added to see how they affect speed and stability of learning.
-
 main.py
 =======
 This file shows how to create and train a network.
