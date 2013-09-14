@@ -1,4 +1,4 @@
-Neural Network in Python2
+Neural Network in Python 2.7
 =========================
 (Under construction)
 
