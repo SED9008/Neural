@@ -148,10 +148,12 @@ class network(object):
 			b = amount
 			
 		while(a < b and loop):
-			while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-				line = sys.stdin.readline()
-				loop = 0
-			else:
+		# Uncomment this part for interrupting the training with a keystroke
+		# Only in linux
+#			while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+#				line = sys.stdin.readline()
+#				loop = 0
+#			else:
 				self.sse = 0
 
 				for h in xrange(0,len(input_set)):
