@@ -101,6 +101,11 @@ hypTangent(self,x)
 ------------------
 Applies the hyperbolic tangent function to x as activation function
 
+scale(self, max_input, input_set)
+---------------------------------
+Scales an input_set you would use in the network to values between 0 and 1. You 
+can enter the maximum value of you dataset. It assumes the dataset values start at 0.
+
 getColor(self,x)
 ----------------
 Function to decide what color a weight line or neuron box should get.
