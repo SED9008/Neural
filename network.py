@@ -164,7 +164,7 @@ class network(object):
 					if(self.debug):
 						print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
 					if(self.graph and not (cnt % self.graphFreq)):
-							self.showNet(False,cnt)
+							self.showNet(False,cnt,False)
 
 				cnt += 1
 				
@@ -194,15 +194,16 @@ class network(object):
 		print ""
 		pp.pprint(self.weights)
 		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
-
+		if(self.graph):
+				self.showNet(False,cnt,True)
 		for h in xrange(len(input_set)):
 			self.calcOuts(input_set[h])
 			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
 			if(self.graph):
-				self.showNet(False,cnt)
+				self.showNet(False,cnt,False)
 			time.sleep(1)
 		if(self.graph):
-			self.showNet(True,cnt)
+			self.showNet(True,cnt,False)
 		return cnt
 
 	def saveWeights(self, filename):
@@ -241,7 +242,7 @@ class network(object):
 		b = 0.667
 		return ((2*a)/(1+math.exp(-b*x)))-a
 
-	def showNet(self, hold, epoch):
+	def showNet(self, hold, epoch, save):
 		pygame.init() 
 		dist = 100
 		rect 	 = 20
@@ -251,6 +252,8 @@ class network(object):
 		else:
 			height_neurons = self.hidden_neurons
 		window = pygame.display.set_mode(((len(self.layer_neurons))*dist,(height_neurons)*dist), pygame.RESIZABLE)
+		
+		
 		pygame.display.set_caption("Neural Network")
 		window.fill((94,130,167))
 		myfont = pygame.font.SysFont("DejaVuSans Mono", 15)
@@ -295,7 +298,9 @@ class network(object):
 				pygame.draw.rect(window, color, (((h*dist)+(dist/2)-(rect/2)),((j*dist)+(dist/2)-(rect/2)),rect,rect),3)
 
 		pygame.display.update()
-		#pygame.image.save(window,"filename.png")
+		if(save):
+			surf = pygame.display.get_surface()
+			pygame.image.save(surf, time.asctime(time.localtime(time.time()))+'.png')
 
 		if hold == True:
 			running = True;
