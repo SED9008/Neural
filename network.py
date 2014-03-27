@@ -31,7 +31,8 @@ class network(object):
 		self.debug			= False
 		self.alpha			= 0.1
 		self.graph			= False
-		self.graphFreq		= 1
+		self.graph_freq		= 1
+		self.graph_image_seq= False
 		self.adaptive_alpha	= False
 		self.alpha_roof		= 3
 		
@@ -163,7 +164,10 @@ class network(object):
 
 					if(self.debug):
 						print input_set[h],output_set[h],self.outs[self.hidden_layers+1], cnt
-					if(self.graph and not (cnt % self.graphFreq)):
+					if(self.graph and not (cnt % self.graph_freq)):
+						if(self.graph_image_seq):
+							self.showNet(False,cnt,True)
+						else:
 							self.showNet(False,cnt,False)
 
 				cnt += 1
@@ -194,8 +198,6 @@ class network(object):
 		print ""
 		pp.pprint(self.weights)
 		print "\nEpochs:",cnt, "Learning_rate of:", self.alpha,"\n\n"
-		if(self.graph):
-				self.showNet(False,cnt,True)
 		for h in xrange(len(input_set)):
 			self.calcOuts(input_set[h])
 			print input_set[h],output_set[h],self.outs[self.hidden_layers+1]
@@ -203,7 +205,7 @@ class network(object):
 				self.showNet(False,cnt,False)
 			time.sleep(1)
 		if(self.graph):
-			self.showNet(True,cnt,False)
+			self.showNet(True,cnt,True)
 		return cnt
 
 	def saveWeights(self, filename):
